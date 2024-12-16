@@ -1,0 +1,18 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://hotel.com/availability" xmlns="http://hotel.com/availability" elementFormDefault="qualified">
+    <xs:element name="CheckAvailabilityRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="startDate" type="xs:date" />
+                <xs:element name="endDate" type="xs:date" />
+                <xs:element name="roomType" type="xs:string" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="CheckAvailabilityResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="availableRooms" type="xs:string" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

@@ -1,6 +1,9 @@
 package com.hotel.soap.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.hotel.soap.model.Availability;
+
 import java.time.LocalDate;
 import java.util.List;
 

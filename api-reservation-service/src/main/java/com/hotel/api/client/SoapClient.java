@@ -1,11 +1,15 @@
 package com.hotel.api.client;
 
+import org.springframework.stereotype.Component;
 import org.springframework.ws.client.core.WebServiceTemplate;
 import javax.xml.bind.JAXBElement;
+import com.hotel.api.soap.CheckAvailabilityRequest;
+import com.hotel.api.soap.CheckAvailabilityResponse;
 
+@Component
 public class SoapClient {
 
-    private WebServiceTemplate webServiceTemplate;
+    private final WebServiceTemplate webServiceTemplate;
 
     public SoapClient(WebServiceTemplate webServiceTemplate) {
         this.webServiceTemplate = webServiceTemplate;

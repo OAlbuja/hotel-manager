@@ -1,40 +1,69 @@
-<definitions name="AvailabilityService" 
-             targetNamespace="http://hotel.com/availability"
-             xmlns="http://schemas.xmlsoap.org/wsdl/"
-             xmlns:tns="http://hotel.com/availability"
-             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-             xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<definitions name="AvailabilityService"
+    targetNamespace="http://hotel.com/availability"
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:tns="http://hotel.com/availability"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
+    <!-- Definición de tipos complejos -->
+    <types>
+    <schema targetNamespace="http://hotel.com/availability" xmlns="http://www.w3.org/2001/XMLSchema">
+        <!-- Elementos de solicitud y respuesta -->
+        <element name="CheckAvailabilityRequest">
+            <complexType>
+                <sequence>
+                    <element name="startDate" type="xsd:date" />
+                    <element name="endDate" type="xsd:date" />
+                    <element name="roomType" type="xsd:string" />
+                </sequence>
+            </complexType>
+        </element>
+        <element name="CheckAvailabilityResponse">
+            <complexType>
+                <sequence>
+                    <element name="availableRooms" type="xsd:string" />
+                </sequence>
+            </complexType>
+        </element>
+    </schema>
+</types>
+
+
+    <!-- Mensajes -->
     <message name="CheckAvailabilityRequest">
-        <part name="startDate" type="xsd:date"/>
-        <part name="endDate" type="xsd:date"/>
-        <part name="roomType" type="xsd:string"/>
+        <part name="parameters" element="tns:CheckAvailabilityRequest" />
     </message>
-
     <message name="CheckAvailabilityResponse">
-        <part name="availableRooms" type="xsd:string"/>
+        <part name="parameters" element="tns:CheckAvailabilityResponse" />
     </message>
 
+    <!-- PortType -->
     <portType name="AvailabilityPort">
         <operation name="checkAvailability">
-            <input message="tns:CheckAvailabilityRequest"/>
-            <output message="tns:CheckAvailabilityResponse"/>
+            <input message="tns:CheckAvailabilityRequest" />
+            <output message="tns:CheckAvailabilityResponse" />
         </operation>
     </portType>
 
+    <!-- Binding -->
     <binding name="AvailabilityBinding" type="tns:AvailabilityPort">
-        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
         <operation name="checkAvailability">
-            <soap:operation soapAction="checkAvailability"/>
-            <input><soap:body use="literal"/></input>
-            <output><soap:body use="literal"/></output>
+            <soap:operation soapAction="checkAvailability" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
         </operation>
     </binding>
 
+    <!-- Servicio -->
     <service name="AvailabilityService">
         <documentation>Servicio para consultar disponibilidad de habitaciones</documentation>
         <port name="AvailabilityPort" binding="tns:AvailabilityBinding">
-            <soap:address location="http://localhost:8081/ws/availability"/>
+            <soap:address location="http://localhost:8081/ws/availability" />
         </port>
     </service>
 </definitions>

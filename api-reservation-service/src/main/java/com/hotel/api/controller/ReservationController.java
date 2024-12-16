@@ -31,4 +31,24 @@ public class ReservationController {
     public void cancelReservation(@PathVariable Long id) {
         reservationRepository.deleteById(id);
     }
+    
+    @PostMapping
+    public Reservation createReservation(@RequestBody Reservation reservation) {
+        // Crear request para el servicio SOAP
+        CheckAvailabilityRequest soapRequest = new CheckAvailabilityRequest();
+        soapRequest.setStartDate(reservation.getStartDate().toString());
+        soapRequest.setEndDate(reservation.getEndDate().toString());
+        soapRequest.setRoomType("Standard"); // Puedes parametrizar esto
+
+        // Llamar al servicio SOAP para verificar disponibilidad
+        CheckAvailabilityResponse soapResponse = soapClient.checkAvailability(soapRequest);
+
+        if (soapResponse.getAvailableRooms() != null && !soapResponse.getAvailableRooms().isEmpty()) {
+            reservation.setStatus("CONFIRMED");
+            return reservationRepository.save(reservation);
+        } else {
+            throw new RuntimeException("No hay habitaciones disponibles para las fechas seleccionadas.");
+        }
+    }
+
 }
