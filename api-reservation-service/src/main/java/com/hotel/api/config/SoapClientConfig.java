@@ -10,7 +10,7 @@ public class SoapClientConfig {
     @Bean
     public WebServiceTemplate webServiceTemplate() {
         WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
-        webServiceTemplate.setDefaultUri("http://localhost:8080/ws"); // URL del servicio SOAP
+        webServiceTemplate.setDefaultUri("http://localhost:8080/ws");
         return webServiceTemplate;
     }
 }

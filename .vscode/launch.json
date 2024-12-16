@@ -9,6 +9,16 @@
             "projectName": "soap-availability-service",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ApiReservationServiceApplication<reservation-service>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.hotel.api.ApiReservationServiceApplication",
+            "projectName": "reservation-service",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }

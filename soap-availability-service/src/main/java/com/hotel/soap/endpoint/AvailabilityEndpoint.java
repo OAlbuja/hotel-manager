@@ -2,8 +2,11 @@ package com.hotel.soap.endpoint;
 
 import com.hotel.soap.model.Availability;
 import com.hotel.soap.repository.AvailabilityRepository;
+import com.hotel.availability.AvailabilityService;
 import com.hotel.availability.CheckAvailabilityRequest;
 import com.hotel.availability.CheckAvailabilityResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
@@ -26,21 +29,27 @@ public class AvailabilityEndpoint {
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "CheckAvailabilityRequest")
     @ResponsePayload
     public CheckAvailabilityResponse checkAvailability(@RequestPayload CheckAvailabilityRequest request) {
-        if (request.getStartDate() == null || request.getEndDate() == null) {
-            throw new IllegalArgumentException("Las fechas startDate y endDate no pueden ser nulas.");
-        }
-
+        // 1) Validar fechas:
         LocalDate startDate = convertToLocalDate(request.getStartDate());
         LocalDate endDate = convertToLocalDate(request.getEndDate());
 
-        List<Availability> availableRooms = repository.findByRoomTypeAndAvailableDateBetweenAndStatus(
-                request.getRoomType(), startDate, endDate, "Disponible");
+        List<Availability> availableRooms;
+        if ("ALL".equalsIgnoreCase(request.getRoomType())) {
+            // 2) Llamar a un método REPO que no filtre por roomType
+            availableRooms = repository.findByAvailableDateBetweenAndStatus(startDate, endDate, "Disponible");
+        } else {
+            // 3) Filtrar por roomType específico
+            availableRooms = repository.findByRoomTypeAndAvailableDateBetweenAndStatus(
+                    request.getRoomType(),
+                    startDate,
+                    endDate,
+                    "Disponible");
+        }
 
         CheckAvailabilityResponse response = new CheckAvailabilityResponse();
         response.setAvailableRooms(availableRooms.toString());
         return response;
     }
-
 
     public LocalDate convertToLocalDate(XMLGregorianCalendar xmlGregorianCalendar) {
         if (xmlGregorianCalendar == null) {
